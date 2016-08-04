@@ -1,5 +1,11 @@
 # oblivisync
 
+## Requriments
+
+ 1. `fuse` 
+ 2. python3 : version 3.5.1 or greater 
+ 3. pycrypt
+ 
 ## Installation
 
 To install, first install fuse for your Operating System. On Ubuntu,
@@ -12,6 +18,12 @@ The initialize the `fusepy` submodule
 ```
 git submodule init
 git submodule update
+```
+
+The installation also depends on PyCrypto. On Ubuntu,
+
+```
+sudo apt-get install python-crypto
 ```
 
 ## Execution
