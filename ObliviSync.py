@@ -38,14 +38,19 @@ import sys
 DEBUG=False
 DEBUG_FILE=sys.stderr
 wooram.DEBUG=False
+drip_rate=3
+drip_time=3
 
 USAGE = """{} [OPTIONS] <backend> <mountpoint> 
 <backend>   \t : where backend files are stored
 <mountpoint>\t : where the fuse client mounts
 
 OPTIONS
-    -r      \t: Read-Only mount
     -h      \t: print this help screen
+    -r      \t: Read-Only mount   (dflt: rw mount)
+    -k      \t: set the drip rate (dflt: 3)
+    -t      \t: set the drip time (dflt: 3)
+
     -v      \t: verbose output
     -d file \t: set verbose output to file (dflt: stderr) (use - for stdout)
 """.format(sys.argv[0])
@@ -53,9 +58,9 @@ OPTIONS
 import getopt
 
 def parse_args():
-    global DEBUG,DEBUG_FILE
+    global DEBUG,DEBUG_FILE, drip_rate, drip_time
 
-    opt,args = getopt.getopt(sys.argv[1:], "hvd:r")
+    opt,args = getopt.getopt(sys.argv[1:], "hvd:rk:t:")
 
     readwrite=True
     for o,v in opt:
@@ -72,6 +77,10 @@ def parse_args():
                 DEBUG_FILE = sys.stdout
         if o == "-r":
             readwrite=False
+        if o == "-k":
+            drip_rate=int(v)
+        if o == "-t":
+            drip_time= int(v)
 
     if len(args) < 2:
         print(USAGE)
@@ -89,7 +98,7 @@ class ObliviSyncRW(LoggingMixIn, Operations):
         
         #load wooram get directory table and the wooram
         self.woo = load_wooram(Backend(key, backdir),
-                               drip_time=drip_time,drip_rate=drip_rate,
+                               drip_time=3,drip_rate=3,
                                blocksize=blocksize,total_blocks=total_blocks)
         self.woo.start() # start the syncer`
         
@@ -638,6 +647,6 @@ if __name__ == '__main__':
 
     backdir,mountdir,key,readwrite = parse_args()
     if readwrite:
-        fuse = FUSE(ObliviSyncRW(backdir, key), mountdir, foreground=True)
+        fuse = FUSE(ObliviSyncRW(backdir, key,drip_rate=drip_rate,drip_time=drip_time), mountdir, foreground=True)
     else:
         fuse = FUSE(ObliviSyncRO(backdir, key), mountdir, foreground=True)
