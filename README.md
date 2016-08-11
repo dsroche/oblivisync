@@ -65,7 +65,7 @@ Two scripts are provided to help this setup:
 
 ## Video Demo
 
-A demovideo can be found here where you can see ObliviSync working
+A demo video can be found at the link belower where you can see ObliviSync working
 with a shared backend folder. 
 
 [![ObliviSync Demo Video](http://img.youtube.com/vi/-MYgtts_sO8/0.jpg)](http://www.youtube.com/watch?v=-MYgtts_sO8)
